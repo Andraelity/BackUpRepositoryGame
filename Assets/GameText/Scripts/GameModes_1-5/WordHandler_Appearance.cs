@@ -8,22 +8,23 @@ using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-using LinkCommunicationNamespace;
+// using LinkCommunicationNamespace;
+
+using LinkCommunicationColoredNamespace;
 
 public class WordHandler_Appearance : MonoBehaviour
 {
+
 	public GameObject ContainerOne_0;
 	public GameObject TextOne_0;
 	public GameObject BackGroundOne_0;
+	public GameObject ShaderBackGroundOne_0;
 
 	public GameObject ContainerTwo_0;
 	public GameObject TextTwo_0;
 	public GameObject BackGroundTwo_0;
+	public GameObject ShaderBackGroundTwo_0;
 	
-
-	List<TextMeshPro> listOfTextMeshPro_One;
-	List<TextMeshPro> listOfTextMeshPro_Two;
-
  	List<string> list_OfStringWordEnglish;
  	List<string> list_OfStringWordFrench;
 
@@ -39,6 +40,9 @@ public class WordHandler_Appearance : MonoBehaviour
 	Vector3 updatedPositionTwo = new Vector3(0.0f, 0.0f, 0.0f);
 
 	Vector3 coordinateBasePosition = new Vector3(-8.4f, -2.1f, 0.0f);
+	Vector3 coordinateBasePositionShader = new Vector3(-8.4f, -2.1f, 1.0f);
+
+
 
     void Start()	
     {	
@@ -55,9 +59,6 @@ public class WordHandler_Appearance : MonoBehaviour
  		list_OfStringWordFrench = new List<string>();
 
 		LoadStringList();
-
-    	listOfTextMeshPro_One = new List<TextMeshPro>();
-    	listOfTextMeshPro_Two = new List<TextMeshPro>();
 
 		text_OneTranslation = TextOne_0.GetComponent<TextMeshPro>();
 		text_TwoTranslation = TextTwo_0.GetComponent<TextMeshPro>();
@@ -86,10 +87,10 @@ public class WordHandler_Appearance : MonoBehaviour
 		System.Random randomPosition = new System.Random();
 
 		float float_OneX = (float)(randomPosition.NextDouble() * 10.5);
-		float float_OneY = (float)(randomPosition.NextDouble() * 7.4);
+		float float_OneY = (float)(randomPosition.NextDouble() * 7.0);
 
 		float float_TwoX = (float)(randomPosition.NextDouble() * 10.5);
-		float float_TwoY = (float)(randomPosition.NextDouble() * 7.4);
+		float float_TwoY = (float)(randomPosition.NextDouble() * 7.0);
 
 									
 
@@ -114,12 +115,20 @@ public class WordHandler_Appearance : MonoBehaviour
 		BackGroundOne_0.transform.position = coordinateBasePosition + new Vector3(float_OneX, float_OneY, 0.0f);
 		BackGroundTwo_0.transform.position = coordinateBasePosition + new Vector3(float_TwoX, float_TwoY, 0.0f);
 
+		ShaderBackGroundOne_0.transform.position = coordinateBasePositionShader + new Vector3(float_OneX, float_OneY, 0.0f);
+		ShaderBackGroundTwo_0.transform.position = coordinateBasePositionShader + new Vector3(float_TwoX, float_TwoY, 0.0f);
+
+
+		Transform transform_ShaderBackOne = ShaderBackGroundOne_0.transform;
 		Transform transform_BackOne = BackGroundOne_0.transform;
+		Transform transform_ShaderBackTwo = ShaderBackGroundTwo_0.transform;
 		Transform transform_BackTwo = BackGroundTwo_0.transform;
-		
+
 		
 
+		transform_ShaderBackOne.localScale = GetScaleBackGround(widthText_One, transform_ShaderBackOne.localScale);
 		transform_BackOne.localScale = GetScaleBackGround(widthText_One, transform_BackOne.localScale);
+		transform_ShaderBackTwo.localScale = GetScaleBackGround(widthText_Two, transform_ShaderBackOne.localScale);
 		transform_BackTwo.localScale = GetScaleBackGround(widthText_Two, transform_BackOne.localScale);
 
 		float position = (widthText_One * 0.212f)/1.15f;
@@ -131,9 +140,14 @@ public class WordHandler_Appearance : MonoBehaviour
 		transform_BackOne.position +=  updatedPositionOne;
 		transform_BackTwo.position +=  updatedPositionTwo;
 
+		transform_ShaderBackOne.position +=  updatedPositionOne;
+		transform_ShaderBackTwo.position +=  updatedPositionTwo;
 
 		BackGroundOne_0.transform.position = transform_BackOne.position;
 		BackGroundTwo_0.transform.position = transform_BackTwo.position; 
+
+		ShaderBackGroundOne_0.transform.position = transform_ShaderBackOne.position;
+		ShaderBackGroundTwo_0.transform.position = transform_ShaderBackTwo.position; 
 
 
 		// transform_BackOne = transform_ContainerOne;
@@ -218,6 +232,16 @@ public class WordHandler_Appearance : MonoBehaviour
     }
 
 
+
+    Vector3 GetScaleShaderBackGround(float width, Vector3 Current)
+    {
+		float scale = (width * 0.06f)/1.15f ;
+    	Vector3 valueOut = new Vector3(scale, Current.y, Current.z);
+  
+    	return valueOut;
+    }
+
+
     Vector3 GetScaleBackGround(float width, Vector3 Current)
     {
 		float scale = (width * 0.045f)/1.15f ;
@@ -225,7 +249,6 @@ public class WordHandler_Appearance : MonoBehaviour
   
     	return valueOut;
     }
-
 
     Vector3 GetPositionBackGround(float width)
     {
@@ -277,6 +300,104 @@ public class WordHandler_Appearance : MonoBehaviour
 
 
     }
+
+    void ColorCurrentTextList(bool bool_SetList, int numberOfCharacters)
+    { 
+
+		TMP_Text m_TextComponent;
+
+		if(bool_SetList == true)
+		{
+			m_TextComponent = text_OneTranslation.GetComponent<TMP_Text>();
+
+		}
+		else
+		{
+			m_TextComponent = text_TwoTranslation.GetComponent<TMP_Text>();
+		}
+
+		m_TextComponent.ForceMeshUpdate();
+
+
+        TMP_TextInfo textInfo = m_TextComponent.textInfo;
+
+        if(numberOfCharacters > 0)
+        {
+
+	        for(int i = 0; i < numberOfCharacters; i++)
+	        {
+		
+		        int currentCharacter = i;
+		        
+		        int characterCount = textInfo.characterCount;
+		
+		        Color32[] newVertexColors;
+		        Color32 c0 = m_TextComponent.color;
+		
+		        int materialIndex = textInfo.characterInfo[currentCharacter].materialReferenceIndex;
+		        newVertexColors = textInfo.meshInfo[materialIndex].colors32;
+		        int vertexIndex = textInfo.characterInfo[currentCharacter].vertexIndex;
+		
+		
+		
+		        if (textInfo.characterInfo[currentCharacter].isVisible)
+		        {
+		            c0 = new Color32((byte)UnityEngine.Random.Range(0, 255), (byte)UnityEngine.Random.Range(0, 255), (byte)UnityEngine.Random.Range(0, 255), 255);
+		            newVertexColors[vertexIndex + 0] = c0;
+		            newVertexColors[vertexIndex + 1] = c0;
+		            newVertexColors[vertexIndex + 2] = c0;
+		            newVertexColors[vertexIndex + 3] = c0;
+		            // New function which pushes (all) updated vertex data to the appropriate meshes when using either the Mesh Renderer or CanvasRenderer.
+		            m_TextComponent.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+		            // This last process could be done to only update the vertex data that has changed as opposed to all of the vertex data but it would require extra steps and knowing what type of renderer is used.
+		            // These extra steps would be a performance optimization but it is unlikely that such optimization will be necessary.
+		        }
+	
+		    }
+
+        }
+
+
+        if(numberOfCharacters == 0)
+        {
+
+	        for(int i = 0; i < numberOfCharacters; i++)
+	        {
+		
+		        int currentCharacter = i;
+		        
+		        int characterCount = textInfo.characterCount;
+		
+		        Color32[] newVertexColors;
+		        Color32 c0 = m_TextComponent.color;
+		
+		        int materialIndex = textInfo.characterInfo[currentCharacter].materialReferenceIndex;
+		        newVertexColors = textInfo.meshInfo[materialIndex].colors32;
+		        int vertexIndex = textInfo.characterInfo[currentCharacter].vertexIndex;
+		
+		
+		
+		        if (textInfo.characterInfo[currentCharacter].isVisible)
+		        {
+		            c0 = new Color32((byte)255, (byte)255, (byte)255, 255);
+		            newVertexColors[vertexIndex + 0] = c0;
+		            newVertexColors[vertexIndex + 1] = c0;
+		            newVertexColors[vertexIndex + 2] = c0;
+		            newVertexColors[vertexIndex + 3] = c0;
+		            // New function which pushes (all) updated vertex data to the appropriate meshes when using either the Mesh Renderer or CanvasRenderer.
+		            m_TextComponent.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+		            // This last process could be done to only update the vertex data that has changed as opposed to all of the vertex data but it would require extra steps and knowing what type of renderer is used.
+		            // These extra steps would be a performance optimization but it is unlikely that such optimization will be necessary.
+		        }
+	
+		    }
+
+		}
+
+    }
+
+
+
 
 
     int int_CurrentOne = 0;
@@ -346,6 +467,96 @@ public class WordHandler_Appearance : MonoBehaviour
 
     	}
 
+    	if(Input.GetKeyDown(KeyCode.F11))
+    	{
+			SceneManager.LoadScene (sceneBuildIndex:10);
+
+    	}
+
+		
+		
+		string string_OperativeInputField = LinkCommunicationColoredClass.string_InputField;
+		
+		if(bool_CurrentOne)
+		{
+
+			Debug.Log("Print elements ||   " + string_OperativeInputField);
+
+			string string_OperativeListEnglish = string_OneTranslation;
+
+			int int_CounterToColorChar = 0;
+
+			if(string_OperativeInputField.Length <= string_OperativeListEnglish.Length)
+			{				
+				for(int i = 0; i < string_OperativeInputField.Length; i++)
+				{
+					if(string_OperativeInputField[i] == string_OperativeListEnglish[i])
+					{
+						int_CounterToColorChar++;
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			Debug.Log("Int COUNTER COLOR 	||||	" + int_CounterToColorChar);
+			
+			ColorCurrentTextList(true, int_CounterToColorChar);
+
+		}
+
+		if(bool_CurrentTwo)
+		{
+
+			Debug.Log("Print elements ||   " + string_OperativeInputField);
+
+			string string_OperativeListFrench = string_TwoTranslation;
+
+			int int_CounterToColorChar = 0;
+
+			if(string_OperativeInputField.Length <= string_OperativeListFrench.Length)
+			{				
+				for(int i = 0; i < string_OperativeInputField.Length; i++)
+				{
+					if(string_OperativeInputField[i] == string_OperativeListFrench[i])
+					{
+						int_CounterToColorChar++;
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			Debug.Log("Int COUNTER COLOR 	||||	" + int_CounterToColorChar);
+			
+			ColorCurrentTextList(false, int_CounterToColorChar);
+
+		}
+
+
+
+		if(bool_CurrentOne == false)
+		{
+
+			string string_OperativeListEnglish = string_OneTranslation;
+
+			
+			ColorCurrentTextList(true, string_OneTranslation.Length);
+
+		}
+
+		if(bool_CurrentTwo == false)
+		{
+
+
+			string string_OperativeListFrench = string_TwoTranslation;
+	
+			ColorCurrentTextList(false, string_OperativeListFrench.Length);
+
+		}
+
     	if(bool_CheckString == true)
     	{
 
@@ -355,7 +566,7 @@ public class WordHandler_Appearance : MonoBehaviour
    			if(string_FromInputField == string_OneTranslation && bool_CurrentOne )
    			{
    			
-   				text_OneTranslation.text = "";
+   				// text_OneTranslation.text = "";
     		
     			bool_CurrentOne = false;
 				
@@ -368,7 +579,7 @@ public class WordHandler_Appearance : MonoBehaviour
    			if(string_FromInputField == string_TwoTranslation && bool_CurrentTwo)
    			{
 
-   				text_TwoTranslation.text = "";
+   				// text_TwoTranslation.text = "";
 
    				bool_CurrentTwo = false;	
 
@@ -380,14 +591,14 @@ public class WordHandler_Appearance : MonoBehaviour
     	}
 
 
-    	if(LinkCommunicationClass.bool_ActiveStatus == true)
+    	if(LinkCommunicationColoredClass.bool_ActiveStatus == true)
     	{
 
-    		LinkCommunicationClass.bool_ActiveStatus = false;
+    		LinkCommunicationColoredClass.bool_ActiveStatus = false;
 
-    		Debug.Log("String In WordHandler_List = " + LinkCommunicationClass.string_InputField);
+    		Debug.Log("String In WordHandler_List = " + LinkCommunicationColoredClass.string_InputField);
 
-    		string_FromInputField = LinkCommunicationClass.string_InputField;
+    		string_FromInputField = LinkCommunicationColoredClass.string_InputField;
 
 
     		bool_CheckString = true;
@@ -429,10 +640,10 @@ public class WordHandler_Appearance : MonoBehaviour
 			System.Random randomPosition = new System.Random();
 	
 			float float_OneX = (float)(randomPosition.NextDouble() * 10.5);
-			float float_OneY = (float)(randomPosition.NextDouble() * 7.4);
+			float float_OneY = (float)(randomPosition.NextDouble() * 7.0);
 	
 			float float_TwoX = (float)(randomPosition.NextDouble() * 10.5);
-			float float_TwoY = (float)(randomPosition.NextDouble() * 7.4);
+			float float_TwoY = (float)(randomPosition.NextDouble() * 7.0);
 									
 			float overpositionComparation = Math.Abs(float_OneY - float_TwoY);
 			if(overpositionComparation < 0.9)
@@ -447,31 +658,31 @@ public class WordHandler_Appearance : MonoBehaviour
 				}
 			}
 
-			ContainerOne_0.transform.position = coordinateBasePosition + new Vector3(float_OneX, float_OneY, 0.0f);
-			ContainerTwo_0.transform.position = coordinateBasePosition + new Vector3(float_TwoX, float_TwoY, 0.0f);
+			// ContainerOne_0.transform.position = coordinateBasePosition + new Vector3(float_OneX, float_OneY, 0.0f);
+			// ContainerTwo_0.transform.position = coordinateBasePosition + new Vector3(float_TwoX, float_TwoY, 0.0f);
 	
-			BackGroundOne_0.transform.position = coordinateBasePosition + new Vector3(float_OneX, float_OneY, 0.0f);
-			BackGroundTwo_0.transform.position = coordinateBasePosition + new Vector3(float_TwoX, float_TwoY, 0.0f);
+			// BackGroundOne_0.transform.position = coordinateBasePosition + new Vector3(float_OneX, float_OneY, 0.0f);
+			// BackGroundTwo_0.transform.position = coordinateBasePosition + new Vector3(float_TwoX, float_TwoY, 0.0f);
 	
-			Transform transform_BackOne = BackGroundOne_0.transform;
-			Transform transform_BackTwo = BackGroundTwo_0.transform;
+			// Transform transform_BackOne = BackGroundOne_0.transform;
+			// Transform transform_BackTwo = BackGroundTwo_0.transform;
 			
 			
-			transform_BackOne.localScale = GetScaleBackGround(widthText_One, transform_BackOne.localScale);
-			transform_BackTwo.localScale = GetScaleBackGround(widthText_Two, transform_BackOne.localScale);
+			// transform_BackOne.localScale = GetScaleBackGround(widthText_One, transform_BackOne.localScale);
+			// transform_BackTwo.localScale = GetScaleBackGround(widthText_Two, transform_BackOne.localScale);
 	
-			float position = (widthText_One * 0.212f)/1.15f;
-			float position2 = (widthText_Two * 0.212f)/1.15f;
+			// float position = (widthText_One * 0.212f)/1.15f;
+			// float position2 = (widthText_Two * 0.212f)/1.15f;
 	
 
-			updatedPositionOne = GetPositionBackGround(widthText_One);
-			updatedPositionTwo = GetPositionBackGround(widthText_Two);
+			// updatedPositionOne = GetPositionBackGround(widthText_One);
+			// updatedPositionTwo = GetPositionBackGround(widthText_Two);
 
-			transform_BackOne.position +=  updatedPositionOne;
-			transform_BackTwo.position +=  updatedPositionTwo;
+			// transform_BackOne.position +=  updatedPositionOne;
+			// transform_BackTwo.position +=  updatedPositionTwo;
 	
-			BackGroundOne_0.transform.position = transform_BackOne.position;
-			BackGroundTwo_0.transform.position = transform_BackTwo.position; 
+			// BackGroundOne_0.transform.position = transform_BackOne.position;
+			// BackGroundTwo_0.transform.position = transform_BackTwo.position; 
 
 
 			BackGroundOne_0.SetActive(true);
@@ -479,7 +690,47 @@ public class WordHandler_Appearance : MonoBehaviour
 
 
 
+			ContainerOne_0.transform.position = coordinateBasePosition + new Vector3(float_OneX, float_OneY, 0.0f);
+			ContainerTwo_0.transform.position = coordinateBasePosition + new Vector3(float_TwoX, float_TwoY, 0.0f);
 
+			BackGroundOne_0.transform.position = coordinateBasePosition + new Vector3(float_OneX, float_OneY, 0.0f);
+			BackGroundTwo_0.transform.position = coordinateBasePosition + new Vector3(float_TwoX, float_TwoY, 0.0f);
+
+
+			ShaderBackGroundOne_0.transform.position = coordinateBasePositionShader + new Vector3(float_OneX, float_OneY, 0.0f);
+			ShaderBackGroundTwo_0.transform.position = coordinateBasePositionShader + new Vector3(float_TwoX, float_TwoY, 0.0f);
+
+
+			Transform transform_ShaderBackOne = ShaderBackGroundOne_0.transform;
+			Transform transform_BackOne = BackGroundOne_0.transform;
+			Transform transform_ShaderBackTwo = ShaderBackGroundTwo_0.transform;
+			Transform transform_BackTwo = BackGroundTwo_0.transform;
+
+
+
+			transform_ShaderBackOne.localScale = GetScaleShaderBackGround(widthText_One, transform_ShaderBackOne.localScale);
+			transform_BackOne.localScale = GetScaleBackGround(widthText_One, transform_BackOne.localScale);
+			transform_ShaderBackTwo.localScale = GetScaleShaderBackGround(widthText_Two, transform_ShaderBackOne.localScale);
+			transform_BackTwo.localScale = GetScaleBackGround(widthText_Two, transform_BackOne.localScale);
+
+			float position = (widthText_One * 0.212f)/1.15f;
+			float position2 = (widthText_Two * 0.212f)/1.15f;
+
+			updatedPositionOne = GetPositionBackGround(widthText_One);
+			updatedPositionTwo = GetPositionBackGround(widthText_Two); 
+
+			transform_BackOne.position +=  updatedPositionOne;
+			transform_BackTwo.position +=  updatedPositionTwo;
+
+			transform_ShaderBackOne.position +=  updatedPositionOne;
+			transform_ShaderBackTwo.position +=  updatedPositionTwo;
+
+
+			BackGroundOne_0.transform.position = transform_BackOne.position;
+			BackGroundTwo_0.transform.position = transform_BackTwo.position; 
+
+			ShaderBackGroundOne_0.transform.position = transform_ShaderBackOne.position;
+			ShaderBackGroundTwo_0.transform.position = transform_ShaderBackTwo.position; 
 
 
     	}

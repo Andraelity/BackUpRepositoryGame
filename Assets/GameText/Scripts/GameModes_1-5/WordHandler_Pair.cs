@@ -8,11 +8,30 @@ using TMPro;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-using LinkCommunicationNamespace;
+using LinkCommunicationColoredNamespace;
 
 public class WordHandler_Pair : MonoBehaviour
 {
 
+	public GameObject PlanePointer;
+
+	Vector3 vector3_FirstPositionPlanePointer;
+
+
+	public GameObject BackgroundOne_0;
+	public GameObject BackgroundOne_1;
+	public GameObject BackgroundOne_2;
+	public GameObject BackgroundOne_3; 
+
+	public GameObject BackgroundTwo_0;
+	public GameObject BackgroundTwo_1;
+	public GameObject BackgroundTwo_2;
+	public GameObject BackgroundTwo_3;
+	
+	List<GameObject> list_BackGround_One;
+	List<GameObject> list_BackGround_Two;
+
+	
 	public GameObject TextOne_0;
 	public GameObject TextOne_1;
 	public GameObject TextOne_2;
@@ -38,6 +57,9 @@ public class WordHandler_Pair : MonoBehaviour
     void Start()	
     {	
 
+		vector3_FirstPositionPlanePointer = PlanePointer.transform.position;
+
+
         float_CurrentTime = Time.realtimeSinceStartup + 59853;
 
  		list_OfStringEnglish = new List<string>();
@@ -45,6 +67,22 @@ public class WordHandler_Pair : MonoBehaviour
 
 
 		LoadStringList();
+
+
+		list_BackGround_One = new List<GameObject>();
+    	list_BackGround_Two = new List<GameObject>();
+
+		list_BackGround_One.Add(BackgroundOne_0);
+		list_BackGround_One.Add(BackgroundOne_1);
+		list_BackGround_One.Add(BackgroundOne_2);
+		list_BackGround_One.Add(BackgroundOne_3);
+
+		list_BackGround_Two.Add(BackgroundTwo_0);
+		list_BackGround_Two.Add(BackgroundTwo_1);
+		list_BackGround_Two.Add(BackgroundTwo_2);
+		list_BackGround_Two.Add(BackgroundTwo_3);
+
+
 
     	listOfTextMeshPro_One = new List<TextMeshPro>();
     	listOfTextMeshPro_Two = new List<TextMeshPro>();
@@ -100,7 +138,6 @@ public class WordHandler_Pair : MonoBehaviour
     void LoadStringList()
     {
 
-
 		TextAsset asset = (TextAsset)Resources.Load("WordListEnglish");
 		string string_FileLines = asset.ToString();
 
@@ -134,8 +171,104 @@ public class WordHandler_Pair : MonoBehaviour
 		
 		}
 
+    }
+
+	
+    void ColorCurrentTextPair(bool bool_SetList, int currentList, int numberOfCharacters)
+    { 
+
+		TMP_Text m_TextComponent;
+
+		if(bool_SetList == true)
+		{
+			m_TextComponent = listOfTextMeshPro_One[currentList].GetComponent<TMP_Text>();
+
+		}
+		else
+		{
+			m_TextComponent = listOfTextMeshPro_Two[currentList].GetComponent<TMP_Text>();
+		}
+
+		m_TextComponent.ForceMeshUpdate();
+
+
+        TMP_TextInfo textInfo = m_TextComponent.textInfo;
+
+        if(numberOfCharacters > 0)
+        {
+
+	        for(int i = 0; i < numberOfCharacters; i++)
+	        {
+		
+		        int currentCharacter = i;
+		        
+		        int characterCount = textInfo.characterCount;
+		
+		        Color32[] newVertexColors;
+		        Color32 c0 = m_TextComponent.color;
+		
+		        int materialIndex = textInfo.characterInfo[currentCharacter].materialReferenceIndex;
+		        newVertexColors = textInfo.meshInfo[materialIndex].colors32;
+		        int vertexIndex = textInfo.characterInfo[currentCharacter].vertexIndex;
+		
+		
+		
+		        if (textInfo.characterInfo[currentCharacter].isVisible)
+		        {
+		            c0 = new Color32((byte)UnityEngine.Random.Range(0, 255), (byte)UnityEngine.Random.Range(0, 255), (byte)UnityEngine.Random.Range(0, 255), 255);
+		            newVertexColors[vertexIndex + 0] = c0;
+		            newVertexColors[vertexIndex + 1] = c0;
+		            newVertexColors[vertexIndex + 2] = c0;
+		            newVertexColors[vertexIndex + 3] = c0;
+		            // New function which pushes (all) updated vertex data to the appropriate meshes when using either the Mesh Renderer or CanvasRenderer.
+		            m_TextComponent.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+		            // This last process could be done to only update the vertex data that has changed as opposed to all of the vertex data but it would require extra steps and knowing what type of renderer is used.
+		            // These extra steps would be a performance optimization but it is unlikely that such optimization will be necessary.
+		        }
+	
+		    }
+
+        }
+
+
+        if(numberOfCharacters == 0)
+        {
+
+	        for(int i = 0; i < numberOfCharacters; i++)
+	        {
+		
+		        int currentCharacter = i;
+		        
+		        int characterCount = textInfo.characterCount;
+		
+		        Color32[] newVertexColors;
+		        Color32 c0 = m_TextComponent.color;
+		
+		        int materialIndex = textInfo.characterInfo[currentCharacter].materialReferenceIndex;
+		        newVertexColors = textInfo.meshInfo[materialIndex].colors32;
+		        int vertexIndex = textInfo.characterInfo[currentCharacter].vertexIndex;
+		
+		
+		
+		        if (textInfo.characterInfo[currentCharacter].isVisible)
+		        {
+		            c0 = new Color32((byte)255, (byte)255, (byte)255, 255);
+		            newVertexColors[vertexIndex + 0] = c0;
+		            newVertexColors[vertexIndex + 1] = c0;
+		            newVertexColors[vertexIndex + 2] = c0;
+		            newVertexColors[vertexIndex + 3] = c0;
+		            // New function which pushes (all) updated vertex data to the appropriate meshes when using either the Mesh Renderer or CanvasRenderer.
+		            m_TextComponent.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+		            // This last process could be done to only update the vertex data that has changed as opposed to all of the vertex data but it would require extra steps and knowing what type of renderer is used.
+		            // These extra steps would be a performance optimization but it is unlikely that such optimization will be necessary.
+		        }
+	
+		    }
+
+		}
 
     }
+
 
 
     int int_CurrentOne = 0;
@@ -214,6 +347,71 @@ public class WordHandler_Pair : MonoBehaviour
 
     	}
 
+    	if(Input.GetKeyDown(KeyCode.F11))
+    	{
+			SceneManager.LoadScene (sceneBuildIndex:10);
+
+    	}
+
+		string string_OperativeInputField = LinkCommunicationColoredClass.string_InputField;
+		
+		if(bool_CurrentOne)
+		{
+
+			Debug.Log("Print elements ||   " + string_OperativeInputField);
+
+			int int_CounterToColorChar = 0;
+
+			if(string_OperativeInputField.Length <= string_OneTranslation.Length)
+			{				
+				for(int i = 0; i < string_OperativeInputField.Length; i++)
+				{
+					if(string_OperativeInputField[i] == string_OneTranslation[i])
+					{
+						int_CounterToColorChar++;
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			Debug.Log("Int COUNTER COLOR 	||||	" + int_CounterToColorChar);
+			
+			ColorCurrentTextPair(true, int_CurrentOne, int_CounterToColorChar);
+
+		}
+
+		if(bool_CurrentTwo)
+		{
+
+			Debug.Log("Print elements ||   " + string_OperativeInputField);
+
+			int int_CounterToColorChar = 0;
+
+			if(string_OperativeInputField.Length <= string_TwoTranslation.Length)
+			{				
+				for(int i = 0; i < string_OperativeInputField.Length; i++)
+				{
+					if(string_OperativeInputField[i] == string_TwoTranslation[i])
+					{
+						int_CounterToColorChar++;
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			Debug.Log("Int COUNTER COLOR 	||||	" + int_CounterToColorChar);
+			
+			ColorCurrentTextPair(false, int_CurrentTwo, int_CounterToColorChar);
+
+		}
+
+
+
+
 
     	if(bool_CheckString == true)
     	{
@@ -225,9 +423,11 @@ public class WordHandler_Pair : MonoBehaviour
     			
     			if(string_FromInputField == string_OneTranslation)
     			{
-    			
+					Vector3 vector3_OperativePositionHandler = PlanePointer.transform.position;
+					PlanePointer.transform.position = new Vector3(vector3_OperativePositionHandler.x + 8.0f, vector3_OperativePositionHandler.y, vector3_OperativePositionHandler.z);
+
     				listOfTextMeshPro_One[int_CurrentOne].text = "";
-	    		
+	    			list_BackGround_One[int_CurrentOne].SetActive(false);
 	    			bool_CurrentOne = false;
 	    			bool_CurrentTwo = true;
 	
@@ -243,7 +443,11 @@ public class WordHandler_Pair : MonoBehaviour
     			if(string_FromInputField == string_TwoTranslation)
     			{
 
+					Vector3 vector3_OperativePositionHandler = PlanePointer.transform.position;
+					PlanePointer.transform.position = new Vector3(vector3_OperativePositionHandler.x - 8.0f, vector3_OperativePositionHandler.y - 1.25f, vector3_OperativePositionHandler.z);
+
     				listOfTextMeshPro_Two[int_CurrentTwo].text = "";
+	    			list_BackGround_Two[int_CurrentTwo].SetActive(false);
 
     				bool_CurrentOne = true;
     				bool_CurrentTwo = false;	
@@ -257,14 +461,14 @@ public class WordHandler_Pair : MonoBehaviour
     	}
 
 
-    	if(LinkCommunicationClass.bool_ActiveStatus == true)
+    	if(LinkCommunicationColoredClass.bool_ActiveStatus == true)
     	{
 
-    		LinkCommunicationClass.bool_ActiveStatus = false;
+    		LinkCommunicationColoredClass.bool_ActiveStatus = false;
 
-    		Debug.Log("String In WordHandler = " + LinkCommunicationClass.string_InputField);
+    		Debug.Log("String In WordHandler = " + LinkCommunicationColoredClass.string_InputField);
 
-    		string_FromInputField = LinkCommunicationClass.string_InputField;
+    		string_FromInputField = LinkCommunicationColoredClass.string_InputField;
 
 
 
@@ -276,6 +480,9 @@ public class WordHandler_Pair : MonoBehaviour
     	if(int_CurrentTwo == 4)
     	{
 	        float_CurrentTime = Time.realtimeSinceStartup;
+
+			PlanePointer.transform.position = vector3_FirstPositionPlanePointer;
+
 
 			System.Random randomGeneratorNumber = new System.Random((int) float_CurrentTime);
 			int int_randomListPosition = randomGeneratorNumber.Next(0, list_OfStringEnglish.Count);
@@ -290,6 +497,8 @@ public class WordHandler_Pair : MonoBehaviour
 
     			listOfTextMeshPro_One[i].text = string_OneTranslation;
     			listOfTextMeshPro_Two[i].text = string_TwoTranslation;
+				list_BackGround_One[i].SetActive(true);
+				list_BackGround_Two[i].SetActive(true); 
 
     		}
 

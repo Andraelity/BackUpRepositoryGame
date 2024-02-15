@@ -786,6 +786,13 @@ public class WordHandler_PairSentences : MonoBehaviour
 			SceneManager.LoadScene (sceneBuildIndex:9);
 
     	}
+		
+    	if(Input.GetKeyDown(KeyCode.F11))
+    	{
+			SceneManager.LoadScene (sceneBuildIndex:10);
+
+    	}
+
 
 
 

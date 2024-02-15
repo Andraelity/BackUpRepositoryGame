@@ -33,6 +33,16 @@ public class WordHandler_WritingList : MonoBehaviour
 	public GameObject BoxOne_6; 
 	public GameObject BoxOne_7; 
 
+	public GameObject PlaneBackgroundOne_0;
+	public GameObject PlaneBackgroundOne_1;
+	public GameObject PlaneBackgroundOne_2;
+	public GameObject PlaneBackgroundOne_3; 
+	public GameObject PlaneBackgroundOne_4; 
+	public GameObject PlaneBackgroundOne_5; 
+	public GameObject PlaneBackgroundOne_6; 
+	public GameObject PlaneBackgroundOne_7; 
+
+
 
 
 	List<GameObject> listOfBoxGameObject_One;
@@ -42,6 +52,7 @@ public class WordHandler_WritingList : MonoBehaviour
 	List<Quaternion> listOfRotation_One;
 	List<Collider> listOfCollider_One;
 	List<TextMeshPro> listOfTextMeshPro_One;
+	List<GameObject> listOfPlaneGameObject_One;
 
  	List<string> list_OfStringEnglish;
  	List<string> list_OfStringFrench;
@@ -51,6 +62,7 @@ public class WordHandler_WritingList : MonoBehaviour
     string string_OneTranslation = "Goal";
     string string_TwoTranslation = "Goalition";
 
+	Vector3 vector3_DefaultLocalScalePlane;
 
     void Start()	
     {	
@@ -173,6 +185,18 @@ public class WordHandler_WritingList : MonoBehaviour
 		TextMeshPro valuesOne_7 = TextOne_7.GetComponent<TextMeshPro>();
 
 
+		listOfPlaneGameObject_One = new List<GameObject>();
+
+		listOfPlaneGameObject_One.Add(PlaneBackgroundOne_0);
+		listOfPlaneGameObject_One.Add(PlaneBackgroundOne_1);
+		listOfPlaneGameObject_One.Add(PlaneBackgroundOne_2);
+		listOfPlaneGameObject_One.Add(PlaneBackgroundOne_3);
+		listOfPlaneGameObject_One.Add(PlaneBackgroundOne_4);
+		listOfPlaneGameObject_One.Add(PlaneBackgroundOne_5);
+		listOfPlaneGameObject_One.Add(PlaneBackgroundOne_6);
+		listOfPlaneGameObject_One.Add(PlaneBackgroundOne_7);
+
+
 
 		var src = DateTime.Now;
 		var hm = new DateTime(src.Year, src.Month, src.Day, src.Hour, src.Minute, src.Second);
@@ -206,6 +230,30 @@ public class WordHandler_WritingList : MonoBehaviour
 
 
 
+		vector3_DefaultLocalScalePlane = PlaneBackgroundOne_0.transform.localScale;
+
+
+		float widthText_One   = valuesOne_0.preferredWidth;
+
+		PlaneBackgroundOne_0.transform.localScale = GetScaleBackGround(widthText_One, PlaneBackgroundOne_0.transform.localScale);
+		PlaneBackgroundOne_1.transform.localScale = GetScaleBackGround(widthText_One, PlaneBackgroundOne_1.transform.localScale);
+		PlaneBackgroundOne_2.transform.localScale = GetScaleBackGround(widthText_One, PlaneBackgroundOne_2.transform.localScale);
+		PlaneBackgroundOne_3.transform.localScale = GetScaleBackGround(widthText_One, PlaneBackgroundOne_3.transform.localScale);
+		PlaneBackgroundOne_4.transform.localScale = GetScaleBackGround(widthText_One, PlaneBackgroundOne_4.transform.localScale);
+		PlaneBackgroundOne_5.transform.localScale = GetScaleBackGround(widthText_One, PlaneBackgroundOne_5.transform.localScale);
+		PlaneBackgroundOne_6.transform.localScale = GetScaleBackGround(widthText_One, PlaneBackgroundOne_6.transform.localScale);
+		PlaneBackgroundOne_7.transform.localScale = GetScaleBackGround(widthText_One, PlaneBackgroundOne_7.transform.localScale);
+		
+
+    }
+
+
+    Vector3 GetScaleBackGround(float width, Vector3 Current)
+    {
+		float scale = (width * 0.06f)/1.15f ;
+    	Vector3 valueOut = new Vector3(scale, Current.y, Current.z);
+  
+    	return valueOut;
     }
 
 
@@ -378,13 +426,11 @@ public class WordHandler_WritingList : MonoBehaviour
 
     	}
 
-
     	if(Input.GetKeyDown(KeyCode.F2))
     	{
 			SceneManager.LoadScene (sceneBuildIndex:1);
 
     	}
-
 
     	if(Input.GetKeyDown(KeyCode.F3))
     	{
@@ -392,20 +438,17 @@ public class WordHandler_WritingList : MonoBehaviour
 
     	}
 
-
     	if(Input.GetKeyDown(KeyCode.F5))
     	{
 			SceneManager.LoadScene (sceneBuildIndex:4);
 
     	}
 
-
     	if(Input.GetKeyDown(KeyCode.F6))
     	{
 			SceneManager.LoadScene (sceneBuildIndex:5);
 
     	}
-
 
     	if(Input.GetKeyDown(KeyCode.F7))
     	{
@@ -431,6 +474,12 @@ public class WordHandler_WritingList : MonoBehaviour
 
     	}
 
+    	if(Input.GetKeyDown(KeyCode.F11))
+    	{
+			SceneManager.LoadScene (sceneBuildIndex:10);
+
+    	}
+
 
     	if(Input.GetKeyDown(KeyCode.Tab))
     	{
@@ -446,6 +495,12 @@ public class WordHandler_WritingList : MonoBehaviour
     		for(int i = 0; i < listOfTextMeshPro_One.Count; i++)
     		{
     			listOfTextMeshPro_One[i].text = string_OneTranslation;
+				float widthText_One = listOfTextMeshPro_One[i].preferredWidth;
+
+				listOfPlaneGameObject_One[i].transform.localScale = vector3_DefaultLocalScalePlane;
+
+				listOfPlaneGameObject_One[i].transform.localScale = GetScaleBackGround(widthText_One, listOfPlaneGameObject_One[i].transform.localScale);
+
     		}
     		if(int_CurrentOne < 7)
     		{
@@ -462,6 +517,12 @@ public class WordHandler_WritingList : MonoBehaviour
     		for(int i = 0; i < listOfTextMeshPro_One.Count; i++)
     		{
     			listOfTextMeshPro_One[i].text = string_TwoTranslation;
+				float widthText_One = listOfTextMeshPro_One[i].preferredWidth;
+
+				listOfPlaneGameObject_One[i].transform.localScale = vector3_DefaultLocalScalePlane;
+
+				listOfPlaneGameObject_One[i].transform.localScale = GetScaleBackGround(widthText_One, listOfPlaneGameObject_One[i].transform.localScale);
+
     		}
     		if(int_CurrentOne < 7)
     		{
@@ -509,6 +570,16 @@ public class WordHandler_WritingList : MonoBehaviour
    			listOfTextMeshPro_One[0].text = string_UpdateText;
    			listOfTextMeshPro_One[1].text = string_UpdateText;
 
+			float widthText_One = listOfTextMeshPro_One[0].preferredWidth;
+			listOfPlaneGameObject_One[0].transform.localScale = vector3_DefaultLocalScalePlane;
+			listOfPlaneGameObject_One[0].transform.localScale = GetScaleBackGround(widthText_One, listOfPlaneGameObject_One[0].transform.localScale);
+			
+			widthText_One = listOfTextMeshPro_One[1].preferredWidth;
+			listOfPlaneGameObject_One[1].transform.localScale = vector3_DefaultLocalScalePlane;
+			listOfPlaneGameObject_One[1].transform.localScale = GetScaleBackGround(widthText_One, listOfPlaneGameObject_One[1].transform.localScale);
+
+
+
 			Destroy(listOfBoxGameObject_One[0].GetComponent<Rigidbody>());
 			Destroy(listOfBoxGameObject_One[1].GetComponent<Rigidbody>());
 							
@@ -516,14 +587,14 @@ public class WordHandler_WritingList : MonoBehaviour
 			listOfTransform_One[1].position = listOfPosition_One[1] + new Vector3(0.0f,  counterPosition, 0.0f);
 			listOfTransform_One[1].rotation = listOfRotation_One[1];
 
-			counterPosition += 4.0f;
+			counterPosition += 5.0f;
    			listOfCollider_One[1].enabled = true;
 
 
 			listOfTransform_One[0].position = listOfPosition_One[0] + new Vector3(0.0f,  counterPosition, 0.0f);
 			listOfTransform_One[0].rotation = listOfRotation_One[0];
 
-			counterPosition += 4.0f;
+			counterPosition += 5.0f;
    			listOfCollider_One[0].enabled = true;
 
 
@@ -693,6 +764,11 @@ public class WordHandler_WritingList : MonoBehaviour
     		{
 
     			listOfTextMeshPro_One[i].text = string_UpdateText;
+				float widthText_One = listOfTextMeshPro_One[i].preferredWidth;
+
+				listOfPlaneGameObject_One[i].transform.localScale = vector3_DefaultLocalScalePlane;
+
+				listOfPlaneGameObject_One[i].transform.localScale = GetScaleBackGround(widthText_One, listOfPlaneGameObject_One[i].transform.localScale);
 
     		}
 
@@ -712,7 +788,7 @@ public class WordHandler_WritingList : MonoBehaviour
 				listOfTransform_One[i].position = listOfPosition_One[i] + new Vector3(0.0f, 8.0f + counterPosition, 0.0f);
 				listOfTransform_One[i].rotation = listOfRotation_One[i];
 
-				counterPosition += 4.0f;
+				counterPosition += 5.0f;
     			listOfCollider_One[i].enabled = true;
 
     		}

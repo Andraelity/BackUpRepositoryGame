@@ -674,21 +674,17 @@ public class WordHandler_Blocks : MonoBehaviour
     void Update()
     {
 
-
-
     	if(Input.GetKeyDown(KeyCode.F1))
     	{
 			SceneManager.LoadScene (sceneBuildIndex:0);
 
     	}
 
-
     	if(Input.GetKeyDown(KeyCode.F2))
     	{
 			SceneManager.LoadScene (sceneBuildIndex:1);
 
     	}
-
 
     	if(Input.GetKeyDown(KeyCode.F3))
     	{
@@ -701,7 +697,6 @@ public class WordHandler_Blocks : MonoBehaviour
 			SceneManager.LoadScene (sceneBuildIndex:3);
 
     	}
-
 
     	if(Input.GetKeyDown(KeyCode.F5))
     	{

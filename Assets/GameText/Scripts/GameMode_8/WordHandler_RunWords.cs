@@ -595,6 +595,13 @@ public class WordHandler_RunWords : MonoBehaviour
 			SceneManager.LoadScene (sceneBuildIndex:9);
 
     	}
+		
+    	if(Input.GetKeyDown(KeyCode.F11))
+    	{
+			SceneManager.LoadScene (sceneBuildIndex:10);
+
+    	}
+
 
     	float_CurrentTime = Time.realtimeSinceStartup;
 

@@ -27,7 +27,7 @@ public class BezierSpline : MonoBehaviour {
 			new Vector3(-3.5f, 4.5f, 10.0f),
 			new Vector3(-2.5f, 5f,   10.0f),
 			new Vector3(-1.5f, 5f,   10.0f),
-			new Vector3(0.5f, 5f,   10.0f)
+			new Vector3(0.7f, 5f,   10.0f)
 			
 		},
 
@@ -43,7 +43,7 @@ public class BezierSpline : MonoBehaviour {
 			new Vector3(-3.5f, 4.5f, 10.0f),
 			new Vector3(-2.5f, 5f,   10.0f),
 			new Vector3(-1.5f, 4f,   10.0f),
-			new Vector3(0.5f, 3.7f,   10.0f)
+			new Vector3(0.7f, 3.7f,   10.0f)
 			
 		},
 
@@ -59,7 +59,7 @@ public class BezierSpline : MonoBehaviour {
 			new Vector3(-3.5f, 3.2f, 10.0f),
 			new Vector3(-2.5f, 3.0f,   10.0f),
 			new Vector3(-1.5f, 2.6f,   10.0f),
-			new Vector3(0.5f, 2.43f,   10.0f)
+			new Vector3(0.7f, 2.43f,   10.0f)
 			
 		},
 
@@ -75,7 +75,7 @@ public class BezierSpline : MonoBehaviour {
 			new Vector3(-3.5f, 1.4f, 10.0f),
 			new Vector3(-2.5f, 1.3f,   10.0f),
 			new Vector3(-1.5f, 1.2f,   10.0f),
-			new Vector3(0.5f, 1.18f,   10.0f)
+			new Vector3(0.7f, 1.18f,   10.0f)
 			
 		},
 
@@ -91,7 +91,7 @@ public class BezierSpline : MonoBehaviour {
 			new Vector3(-3.5f,  -0.8f, 10.0f),
 			new Vector3(-2.5f,  -0.4f,   10.0f),
 			new Vector3(-1.5f,  -0.2f,   10.0f),
-			new Vector3(0.5f,   0f,   10.0f)
+			new Vector3(0.7f,   0f,   10.0f)
 			
 		},
 
@@ -108,7 +108,7 @@ public class BezierSpline : MonoBehaviour {
 			new Vector3(-3.5f, 0f, 10.0f),
 			new Vector3(-2.5f, -0.5f,   10.0f),
 			new Vector3(-1.5f, -1.0f,   10.0f),
-			new Vector3(0.5f, -1.31f,   10.0f)
+			new Vector3(0.7f, -1.31f,   10.0f)
 			
 		}
 

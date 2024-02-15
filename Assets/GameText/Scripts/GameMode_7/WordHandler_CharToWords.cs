@@ -320,10 +320,14 @@ public class WordHandler_CharToWords : MonoBehaviour
 			TextMeshPro textMeshObject = textObject.GetComponent<TextMeshPro>();
 
 
+
 			textMeshObject.text = string_OneTranslation[i].ToString();
 
-			widthText_One   = textMeshObject.preferredWidth;
+			// float float_OperationalSpaceWidth = (string_OneTranslation[i].ToString() == " ")
+
+			widthText_One   = (string_OneTranslation[i].ToString() == " ")? 1.0f: textMeshObject.preferredWidth ;
 			heightText_One  = textMeshObject.preferredHeight;
+			Debug.Log(widthText_One);
 
 
 			backgroundShaderObject.transform.localScale =  GetScaleBackGroundShader(widthText_One * 1.5f, backgroundShaderObject.transform.localScale); 	
@@ -432,7 +436,9 @@ public class WordHandler_CharToWords : MonoBehaviour
 
 			textMeshObject.text = string_TwoTranslation[i].ToString();
 
-			widthText_One   = textMeshObject.preferredWidth;
+			// widthText_One   = textMeshObject.preferredWidth;
+
+			widthText_One   = (string_TwoTranslation[i].ToString() == " ")? 1.0f: textMeshObject.preferredWidth ;
 			heightText_One  = textMeshObject.preferredHeight;
 
 
@@ -721,12 +727,108 @@ public class WordHandler_CharToWords : MonoBehaviour
 
 			}
 
-
-
-
 	    }
 		
 	}
+
+	
+    void ColorCurrentTextPair(bool bool_SetList, int numberOfCharacters)
+    { 
+
+		TMP_Text m_TextComponent;
+
+		if(bool_SetList == true)
+		{
+			m_TextComponent = TextOne_Correct_0.GetComponent<TMP_Text>();
+
+		}
+		else
+		{
+			m_TextComponent = TextOne_Correct_1.GetComponent<TMP_Text>();
+		}
+
+		m_TextComponent.ForceMeshUpdate();
+
+
+        TMP_TextInfo textInfo = m_TextComponent.textInfo;
+
+        if(numberOfCharacters > 0)
+        {
+
+	        for(int i = 0; i < numberOfCharacters; i++)
+	        {
+		
+		        int currentCharacter = i;
+		        
+		        int characterCount = textInfo.characterCount;
+		
+		        Color32[] newVertexColors;
+		        Color32 c0 = m_TextComponent.color;
+		
+		        int materialIndex = textInfo.characterInfo[currentCharacter].materialReferenceIndex;
+		        newVertexColors = textInfo.meshInfo[materialIndex].colors32;
+		        int vertexIndex = textInfo.characterInfo[currentCharacter].vertexIndex;
+		
+		
+		
+		        if (textInfo.characterInfo[currentCharacter].isVisible)
+		        {
+		            c0 = new Color32((byte)UnityEngine.Random.Range(0, 255), (byte)UnityEngine.Random.Range(0, 255), (byte)UnityEngine.Random.Range(0, 255), 255);
+		            newVertexColors[vertexIndex + 0] = c0;
+		            newVertexColors[vertexIndex + 1] = c0;
+		            newVertexColors[vertexIndex + 2] = c0;
+		            newVertexColors[vertexIndex + 3] = c0;
+		            // New function which pushes (all) updated vertex data to the appropriate meshes when using either the Mesh Renderer or CanvasRenderer.
+		            m_TextComponent.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+		            // This last process could be done to only update the vertex data that has changed as opposed to all of the vertex data but it would require extra steps and knowing what type of renderer is used.
+		            // These extra steps would be a performance optimization but it is unlikely that such optimization will be necessary.
+		        }
+	
+		    }
+
+        }
+
+
+        if(numberOfCharacters == 0)
+        {
+
+	        for(int i = 0; i < numberOfCharacters; i++)
+	        {
+		
+		        int currentCharacter = i;
+		        
+		        int characterCount = textInfo.characterCount;
+		
+		        Color32[] newVertexColors;
+		        Color32 c0 = m_TextComponent.color;
+		
+		        int materialIndex = textInfo.characterInfo[currentCharacter].materialReferenceIndex;
+		        newVertexColors = textInfo.meshInfo[materialIndex].colors32;
+		        int vertexIndex = textInfo.characterInfo[currentCharacter].vertexIndex;
+		
+		
+		
+		        if (textInfo.characterInfo[currentCharacter].isVisible)
+		        {
+		            c0 = new Color32((byte)255, (byte)255, (byte)255, 255);
+		            newVertexColors[vertexIndex + 0] = c0;
+		            newVertexColors[vertexIndex + 1] = c0;
+		            newVertexColors[vertexIndex + 2] = c0;
+		            newVertexColors[vertexIndex + 3] = c0;
+		            // New function which pushes (all) updated vertex data to the appropriate meshes when using either the Mesh Renderer or CanvasRenderer.
+		            m_TextComponent.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+		            // This last process could be done to only update the vertex data that has changed as opposed to all of the vertex data but it would require extra steps and knowing what type of renderer is used.
+		            // These extra steps would be a performance optimization but it is unlikely that such optimization will be necessary.
+		        }
+	
+		    }
+
+		}
+
+    }
+
+
+
 
 
 
@@ -772,16 +874,8 @@ public class WordHandler_CharToWords : MonoBehaviour
 	int int_CounterCollisionChar = 0;
 	int int_LengthBothWords = 0;
 
-
-    bool tab_press = false;
-
-    int counter_tab = 0;
-
-
-
-	int int_FirstCorrectWordLength = 0;
-
-    List<int> list_IntColored = new List<int>{0, 0, 0, 0, 0, 0};
+	 bool bool_ColoredIdentified_One = false;
+	 bool bool_ColoredIdentified_Two = false;
 
 
 
@@ -863,6 +957,13 @@ public class WordHandler_CharToWords : MonoBehaviour
 			SceneManager.LoadScene (sceneBuildIndex:9);
 
     	}
+		
+    	if(Input.GetKeyDown(KeyCode.F11))
+    	{
+			SceneManager.LoadScene (sceneBuildIndex:10);
+
+    	}
+
 
     	ColorCurrentTextWordOne(list_IntCharToColorOne);
     	ColorCurrentTextWordTwo(list_IntCharToColorTwo);
@@ -1116,6 +1217,66 @@ public class WordHandler_CharToWords : MonoBehaviour
 		}
 
 
+		
+		string string_OperativeInputField = LinkCommunicationColoredClass.string_InputField;
+		
+		if(bool_SolutionMiniGameOne == false)
+		{
+
+			Debug.Log("Print elements ||   " + string_OperativeInputField);
+
+
+			int int_CounterToColorChar = 0;
+
+			if(string_OperativeInputField.Length <= string_OneTranslation.Length)
+			{				
+				for(int i = 0; i < string_OperativeInputField.Length; i++)
+				{
+					if(string_OperativeInputField[i] == string_OneTranslation[i])
+					{
+						int_CounterToColorChar++;
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			Debug.Log("Int COUNTER COLOR 	||||	" + int_CounterToColorChar);
+			
+			ColorCurrentTextPair(true, int_CounterToColorChar);
+
+		}
+
+		if(bool_SolutionMiniGameTwo == false)
+		{
+
+			Debug.Log("Print elements ||   " + string_OperativeInputField);
+
+			int int_CounterToColorChar = 0;
+
+			if(string_OperativeInputField.Length <= string_TwoTranslation.Length)
+			{				
+				for(int i = 0; i < string_OperativeInputField.Length; i++)
+				{
+					if(string_OperativeInputField[i] == string_TwoTranslation[i])
+					{
+						int_CounterToColorChar++;
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+			Debug.Log("Int COUNTER COLOR 	||||	" + int_CounterToColorChar);
+			
+			ColorCurrentTextPair(false, int_CounterToColorChar);
+
+		}
+
+
+
 		if(bool_ActiveMiniGameStatus && bool_CheckString)
 		{
 			bool_CheckString = false;
@@ -1129,7 +1290,10 @@ public class WordHandler_CharToWords : MonoBehaviour
 
 				TextMeshPro operationalTextOne = TextOne_Correct_0.GetComponent<TextMeshPro>();
 				
-				operationalTextOne.text = "";
+				BoxOne_Correct_0.SetActive(false);
+
+				bool_ColoredIdentified_One = true;
+				// operationalTextOne.text = "";
 				
 				CommunicationCorrectAnswerClass.bool_ActiveCorrectAnswerShader = true;
 
@@ -1144,8 +1308,12 @@ public class WordHandler_CharToWords : MonoBehaviour
 				bool_SolutionMiniGameTwo = true;
 				
 				TextMeshPro operationalTextTwo = TextOne_Correct_1.GetComponent<TextMeshPro>();
+
+				BoxOne_Correct_1.SetActive(false);
 				
-				operationalTextTwo.text = "";
+				bool_ColoredIdentified_Two = true;
+				
+				// operationalTextTwo.text = "";
 
 				CommunicationCorrectAnswerClass.bool_ActiveCorrectAnswerShader = true;
 
@@ -1161,14 +1329,34 @@ public class WordHandler_CharToWords : MonoBehaviour
 		}
 
 
+		if(bool_ColoredIdentified_One)
+		{
+		
+			ColorCurrentTextPair(true, string_OneTranslation.Length);
+		
+		}
+
+
+		if(bool_ColoredIdentified_Two)
+		{
+		
+			ColorCurrentTextPair(false, string_TwoTranslation.Length);
+		
+		}
+
+
 
 		if(bool_SolutionMiniGameOne && bool_SolutionMiniGameTwo)
 		{
 		
 			bool_SolutionMiniGameOne = false;
 			bool_SolutionMiniGameTwo = false;
-
+			
 			bool_ActiveMiniGameStatus = false;
+
+			bool_ColoredIdentified_One = false;
+			bool_ColoredIdentified_Two = false;
+			
 			bool_ResetListOfWords = true;
 		
 		}
@@ -1178,6 +1366,9 @@ public class WordHandler_CharToWords : MonoBehaviour
 		if(bool_ResetListOfWords)
     	{
 			// CommunicationCollisionClass.bool_ResetListOfWords = false;    		
+			BoxOne_Correct_0.SetActive(true);
+			BoxOne_Correct_1.SetActive(true);
+			
 
     		for(int i = 0; i < list_GameObjectInstanciated_0.Count; i++)
     		{
@@ -1436,7 +1627,8 @@ public class WordHandler_CharToWords : MonoBehaviour
 	
 				textMeshObject.text = string_OneTranslation[i].ToString();
 	
-				widthText_One   = textMeshObject.preferredWidth;
+				// widthText_One   = textMeshObject.preferredWidth;
+				widthText_One   = (string_OneTranslation[i].ToString() == " ")? 1.0f: textMeshObject.preferredWidth ;				
 				heightText_One  = textMeshObject.preferredHeight;
 	
 	
@@ -1550,7 +1742,8 @@ public class WordHandler_CharToWords : MonoBehaviour
 	
 				textMeshObject.text = string_TwoTranslation[i].ToString();
 	
-				widthText_One   = textMeshObject.preferredWidth;
+				// widthText_One   = textMeshObject.preferredWidth;
+				widthText_One   = (string_TwoTranslation[i].ToString() == " ")? 1.0f: textMeshObject.preferredWidth ;
 				heightText_One  = textMeshObject.preferredHeight;
 	
 	
@@ -1581,7 +1774,6 @@ public class WordHandler_CharToWords : MonoBehaviour
 	
 
 
-			list_IntColored = new List<int>{0, 0, 0, 0, 0, 0};
 
 
     		float_evaluationTime = float_CurrentTime;

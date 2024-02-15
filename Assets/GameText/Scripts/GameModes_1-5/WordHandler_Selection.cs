@@ -19,8 +19,10 @@ public class WordHandler_Selection : MonoBehaviour
 {
 
 	public GameObject Container;
-	public GameObject TextFocus;
+	public GameObject PlaneShader;
 	public GameObject BoxFocus;
+	public GameObject TextFocus;
+
 
 	Transform transformFocus;
 	Vector3 scaleFocus;
@@ -37,7 +39,9 @@ public class WordHandler_Selection : MonoBehaviour
 	public GameObject TextOne_3; 
 	public GameObject TextOne_4; 
 
+
 	public GameObject TextOne_5; 
+
 
 	public GameObject BoxOne_0;
 	public GameObject BoxOne_1;
@@ -48,6 +52,7 @@ public class WordHandler_Selection : MonoBehaviour
 
 
 	List<GameObject> listOfBoxGameObject_One;
+
 
 	List<Transform> listOfTransform_One;
 	List<Vector3> listOfPosition_One;
@@ -70,19 +75,20 @@ public class WordHandler_Selection : MonoBehaviour
 
     Vector3 updatedPositionOne = new Vector3(0.0f, 0.0f, 0.0f);
 
-
     Vector3 coordinateBase = new Vector3(-7f, -1.75f, 0.0f);
+
 
 
     void Start()	
     {	
+
 
  		list_OfStringEnglish = new List<string>();
  		list_OfStringFrench = new List<string>();
 
 		LoadStringList();
 
-		
+
 		transformFocus = BoxFocus.GetComponent<Transform>();
 		scaleFocus = BoxFocus.GetComponent<Transform>().localScale;
 		positionFocus = BoxFocus.GetComponent<Transform>().position;
@@ -139,25 +145,6 @@ public class WordHandler_Selection : MonoBehaviour
 		listOfPosition_One.Add(positionOne_3);
 		listOfPosition_One.Add(positionOne_4);
 		listOfPosition_One.Add(positionOne_5);
-
-
-
-
-		listOfRotation_One = new List<Quaternion>();
-
-		Quaternion rotationOne_0 = BoxOne_0.GetComponent<Transform>().rotation;
-		Quaternion rotationOne_1 = BoxOne_1.GetComponent<Transform>().rotation;
-		Quaternion rotationOne_2 = BoxOne_2.GetComponent<Transform>().rotation;
-		Quaternion rotationOne_3 = BoxOne_3.GetComponent<Transform>().rotation;
-		Quaternion rotationOne_4 = BoxOne_4.GetComponent<Transform>().rotation;
-		Quaternion rotationOne_5 = BoxOne_5.GetComponent<Transform>().rotation;
-
-		listOfRotation_One.Add(rotationOne_0);
-		listOfRotation_One.Add(rotationOne_1);
-		listOfRotation_One.Add(rotationOne_2);
-		listOfRotation_One.Add(rotationOne_3);
-		listOfRotation_One.Add(rotationOne_4);
-		listOfRotation_One.Add(rotationOne_5);
 
 
 
@@ -273,17 +260,20 @@ public class WordHandler_Selection : MonoBehaviour
 
 		basePositionBox = transformFocus.position;
 
+		PlaneShader.transform.localScale = GetScaleBackGroundShader(widthText_One, PlaneShader.transform.localScale); 
+
 		transformFocus.localScale = GetScaleBackGround(widthText_One, transformFocus.localScale);
 
+		// updatedPositionOne = GetPositionBackGround(widthText_One);
 
-		updatedPositionOne = GetPositionBackGround(widthText_One);
+		// transformFocus.position +=  updatedPositionOne;
+		PlaneShader.transform.position += GetPositionBackGround(widthText_One); 
 
-		transformFocus.position +=  updatedPositionOne;
+		BoxFocus.transform.position += GetPositionBackGround(widthText_One);
+		// BoxFocus.transform.position = transformFocus.position;
 
-
-		BoxFocus.transform.position = transformFocus.position;
-
-
+		PlaneShader.SetActive(false);
+		
 		// System.Random randomPosition = new System.Random();
 	
 		// float float_OneX = (float)(randomPosition.NextDouble() * 10.5);
@@ -301,6 +291,17 @@ public class WordHandler_Selection : MonoBehaviour
   
     	return valueOut;
     }
+
+
+    Vector3 GetScaleBackGroundShader(float width, Vector3 Current)
+    {
+		float scale = (width * 0.06f)/1.15f ;
+    	Vector3 valueOut = new Vector3(scale, Current.y, Current.z);
+  
+    	return valueOut;
+    }
+
+
 
 
     Vector3 GetPositionBackGround(float width)
@@ -638,6 +639,13 @@ public class WordHandler_Selection : MonoBehaviour
 
     	}
 
+    	if(Input.GetKeyDown(KeyCode.F11))
+    	{
+			SceneManager.LoadScene (sceneBuildIndex:10);
+
+    	}
+
+
     	if(Input.GetKeyDown(KeyCode.Tab))
     	{
 
@@ -653,7 +661,8 @@ public class WordHandler_Selection : MonoBehaviour
 
 			string_OneTranslation = list_OfStringEnglish[int_PositionSelected];		
 			string_TwoTranslation = list_OfStringFrench[int_PositionSelected];		
-	
+						
+
 			if(textMeshProFocus.text == "")
 			{
 				
@@ -682,18 +691,37 @@ public class WordHandler_Selection : MonoBehaviour
 
 			transformFocus.position = basePositionBox;
 
-			transformFocus.localScale = GetScaleBackGround(widthText_One, transformFocus.localScale);
-	
-	
-			updatedPositionOne = GetPositionBackGround(widthText_One);
-	
-			transformFocus.position +=  updatedPositionOne;
-	
-	
-			BoxFocus.transform.position = transformFocus.position;
+			// PlaneShader.transform.position = basePositionBox;
 
+			PlaneShader.transform.position = basePositionBox + new Vector3(0.0f, 0.0f, 0.1f);
+
+			PlaneShader.transform.localScale = GetScaleBackGroundShader(widthText_One, PlaneShader.transform.localScale); 
+
+			transformFocus.localScale = GetScaleBackGround(widthText_One, transformFocus.localScale);
+
+			// updatedPositionOne = GetPositionBackGround(widthText_One);
+
+			// transformFocus.position +=  updatedPositionOne;
+
+			PlaneShader.transform.position += GetPositionBackGround(widthText_One); 
+
+			BoxFocus.transform.position += GetPositionBackGround(widthText_One);
+			
+			// BoxFocus.transform.position = transformFocus.position;
+
+
+			// transformFocus.localScale = GetScaleBackGround(widthText_One, transformFocus.localScale);
+
+
+			// updatedPositionOne = GetPositionBackGround(widthText_One);
+	
+			// transformFocus.position +=  updatedPositionOne;
+	
+	
+			// BoxFocus.transform.position = transformFocus.position;
 
     	}
+
 
     	if(counter_tab%2 == 1 && tab_press == true)
     	{
@@ -731,19 +759,35 @@ public class WordHandler_Selection : MonoBehaviour
 
 			transformFocus.position = basePositionBox;
 
+			// PlaneShader.transform.position = basePositionBox;
+			PlaneShader.transform.position = basePositionBox + new Vector3(0.0f, 0.0f, 0.1f);
+			
+			PlaneShader.transform.localScale = GetScaleBackGroundShader(widthText_One, PlaneShader.transform.localScale); 
+
 			transformFocus.localScale = GetScaleBackGround(widthText_One, transformFocus.localScale);
-	
-	
-			updatedPositionOne = GetPositionBackGround(widthText_One);
-	
-			transformFocus.position +=  updatedPositionOne;
-	
-	
-			BoxFocus.transform.position = transformFocus.position;
+
+			// updatedPositionOne = GetPositionBackGround(widthText_One);
+
+			// transformFocus.position +=  updatedPositionOne;
+			PlaneShader.transform.position += GetPositionBackGround(widthText_One); 
+
+			BoxFocus.transform.position += GetPositionBackGround(widthText_One);
+
+			// BoxFocus.transform.position = transformFocus.position;
 
 
+			// transformFocus.localScale = GetScaleBackGround(widthText_One, transformFocus.localScale);
+	
+	
+			// updatedPositionOne = GetPositionBackGround(widthText_One);
+	
+			// transformFocus.position +=  updatedPositionOne;
+	
+	
+			// BoxFocus.transform.position = transformFocus.position;
 
     	}
+
 
     	// print("DebugLogColor");
     	// print("DebugLogColor");
@@ -857,8 +901,11 @@ public class WordHandler_Selection : MonoBehaviour
 		
 		list_IntColored = new List<int>{0, 0, 0, 0, 0, 0};
 
+		if(bool_ListWords)
+		{
 
-
+			ColorCurrentTextSingleWord(string_TwoTranslation.Length);
+		}
 
 
 
@@ -879,7 +926,8 @@ public class WordHandler_Selection : MonoBehaviour
     			if(string_FromInputField == string_EvaluationEquality)
     			{
 	
-    				textMeshProFocus.text = "";
+    				// textMeshProFocus.text = "";
+
 
 					CommunicationCorrectAnswerClass.bool_ActiveCorrectAnswerShader = true;
 
@@ -891,6 +939,8 @@ public class WordHandler_Selection : MonoBehaviour
     				
     				bool_ActiveCamaraShake = false;
 
+					BoxFocus.SetActive(false);
+					PlaneShader.SetActive(true);
 
     			}
 
@@ -1103,15 +1153,32 @@ public class WordHandler_Selection : MonoBehaviour
 
 			transformFocus.position = basePositionBox;
 
+
+			PlaneShader.transform.position = basePositionBox + new Vector3(0.0f, 0.0f, 0.1f);
+
+			PlaneShader.transform.localScale = GetScaleBackGroundShader(widthText_One, PlaneShader.transform.localScale); 
+
 			transformFocus.localScale = GetScaleBackGround(widthText_One, transformFocus.localScale);
+
+			// updatedPositionOne = GetPositionBackGround(widthText_One);
+
+			// transformFocus.position +=  updatedPositionOne;
+			PlaneShader.transform.position += GetPositionBackGround(widthText_One); 
+
+			BoxFocus.transform.position += GetPositionBackGround(widthText_One);
+			// BoxFocus.transform.position = transformFocus.position;
+
+			PlaneShader.SetActive(false);
+			BoxFocus.SetActive(true);
+			// transformFocus.localScale = GetScaleBackGround(widthText_One, transformFocus.localScale);
 	
 	
-			updatedPositionOne = GetPositionBackGround(widthText_One);
+			// updatedPositionOne = GetPositionBackGround(widthText_One);
 	
-			transformFocus.position +=  updatedPositionOne;
+			// transformFocus.position +=  updatedPositionOne;
 	
 	
-			BoxFocus.transform.position = transformFocus.position;
+			// BoxFocus.transform.position = transformFocus.position;
 	
 
 

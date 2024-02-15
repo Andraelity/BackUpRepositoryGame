@@ -1077,6 +1077,11 @@ public class WordHandler_GridLetter : MonoBehaviour
 
     	}
 
+    	if(Input.GetKeyDown(KeyCode.F11))
+    	{
+			SceneManager.LoadScene (sceneBuildIndex:10);
+
+    	}
 
 
 
